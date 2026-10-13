@@ -16,3 +16,9 @@ todos.json
 
 # typescript
 *.tsbuildinfo
+
+# yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/patches
