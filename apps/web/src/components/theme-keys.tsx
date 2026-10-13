@@ -51,7 +51,7 @@ export function ThemeKeys() {
           style={{ left: `calc(${offset} * 1rem - 0.3125rem)` }}
           className={cn(
             KEY_FOCUS,
-            "absolute top-0 z-10 h-[60%] w-2.5 rounded-b-[2px] bg-neutral-900 shadow-[inset_0_-3px_0_rgb(255_255_255/0.18)] transition-[background-color,box-shadow] hover:bg-neutral-800",
+            "absolute top-0 z-10 h-[60%] w-2.5 rounded-b-xs bg-neutral-900 shadow-[inset_0_-3px_0_rgb(255_255_255/0.18)] transition-[background-color,box-shadow] hover:bg-neutral-800",
             "data-pressed:bg-neutral-950 data-pressed:shadow-[inset_0_-1px_0_rgb(255_255_255/0.12)]"
           )}
         />
