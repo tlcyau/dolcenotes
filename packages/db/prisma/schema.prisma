@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum ScheduleFrequency {
+  DAILY
+  WEEKLY
+}
+
+model Tutor {
+  id        String    @id @default(uuid()) @db.Uuid
+  email     String    @unique
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  students  Student[]
+  notes     Note[]
+}
+
+model Student {
+  id        String            @id @default(uuid()) @db.Uuid
+  tutorId   String            @db.Uuid
+  tutor     Tutor             @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  name      String
+  email     String?
+  /// The tutor's free-form notes about the student (lesson notes are `notes`).
+  about     String?
+  schedules StudentSchedule[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  notes     Note[]
+
+  @@index([tutorId])
+}
+
+/// A recurring lesson pattern for a student, e.g. "every Monday", "every other
+/// Wednesday" or "every 3 days". Weekly schedules on several days use one row per day.
+model StudentSchedule {
+  id        String            @id @default(uuid()) @db.Uuid
+  studentId String            @db.Uuid
+  student   Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  frequency ScheduleFrequency @default(WEEKLY)
+  /// Lesson day for weekly schedules; null for daily ones.
+  day       DayOfWeek?
+  /// Repeat every N days or weeks: 1 = every week, 2 = every other week, etc.
+  interval  Int               @default(1)
+  /// First lesson date. Anchors which days or weeks are "on" when interval > 1.
+  startDate DateTime          @db.Date
+  /// Last lesson date, if the schedule has ended.
+  endDate   DateTime?         @db.Date
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@index([studentId])
+  @@index([day])
+}
+
+model Note {
+  id        String   @id @default(uuid()) @db.Uuid
+  tutorId   String   @db.Uuid
+  tutor     Tutor    @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  studentId String?  @db.Uuid
+  student   Student? @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  title     String   @default("Untitled")
+  /// Raw vector stroke paths. Source of truth for the editors.
+  strokes   Json     @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tutorId])
+  @@index([studentId])
+}

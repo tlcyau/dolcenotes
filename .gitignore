@@ -4,6 +4,7 @@ dist
 dist-ssr
 *.local
 .env*
+!.env.example
 .tanstack
 .wrangler
 .output
@@ -16,6 +17,9 @@ todos.json
 
 # typescript
 *.tsbuildinfo
+
+# prisma
+packages/db/src/generated
 
 # yarn
 .yarn/*
