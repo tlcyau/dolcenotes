@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docker-compose.yml` for local PostgreSQL, plus root `db:*` scripts (`db:push` to sync the schema).
 - Web homepage shell: top bar with the treble-clef "dolcenotes" wordmark and a collapsible left nav (empty for now).
 - Homepage calendar with month, week and day views, switched from a toggle in the top bar (kept in the URL as `?view=`). Clicking a date opens its day view.
+- Mobile app (Expo SDK 57, Expo Router) matching the web portal: top bar with the wordmark and piano-key theme switch, a student nav that docks on tablets and slides over on phones, the "Add student" form as a sheet, the month/week/day calendar and the login screen.
 
 ## [0.1.0] - 2026-08-29
 

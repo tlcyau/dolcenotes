@@ -63,6 +63,16 @@ yarn install
 yarn dev          # run all apps in dev mode (web on http://localhost:3000)
 ```
 
+### Mobile app
+
+The Expo app lives in `apps/mobile` and uses Expo Router (screens in `src/app`). Start it on its own with:
+
+```bash
+yarn workspace mobile dev   # then press i (iOS simulator), a (Android) or scan the QR code with Expo Go
+```
+
+It mirrors the web portal's screens with native components. Its dependencies are not hoisted (`installConfig.hoistingLimits`), because Expo pins an exact React version that differs from the web app's. Add native packages with `npx expo install <package>` from `apps/mobile` so they match the Expo SDK.
+
 Other root scripts, all run through Turbo:
 
 ```bash
