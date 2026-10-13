@@ -1,19 +1,32 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { Button } from "@workspace/ui/components/button"
+import { ClientOnly, createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/")({ component: App })
+import { isCalendarView } from "@/lib/calendar"
+import type { CalendarView } from "@/lib/calendar"
+import { AppShell } from "@/components/app-shell"
+import { Calendar } from "@/components/calendar/calendar"
+import { ViewToggle } from "@/components/calendar/view-toggle"
 
-function App() {
+export const Route = createFileRoute("/")({
+  validateSearch: (search): { view?: CalendarView } => ({
+    view: isCalendarView(search.view) ? search.view : undefined,
+  }),
+  component: HomePage,
+})
+
+function HomePage() {
+  const { view = "week" } = Route.useSearch()
+  const navigate = Route.useNavigate()
+
+  function setView(next: CalendarView) {
+    // Week is the default, so keep the bare "/" URL for it.
+    navigate({ search: { view: next === "week" ? undefined : next } })
+  }
+
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-      </div>
-    </div>
+    <AppShell actions={<ViewToggle value={view} onValueChange={setView} />}>
+      <ClientOnly>
+        <Calendar view={view} onViewChange={setView} />
+      </ClientOnly>
+    </AppShell>
   )
 }
